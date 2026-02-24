@@ -20,13 +20,64 @@ export const Shop = () => {
 
     const categories = ['All', 'Men', 'Women', 'Shoes', 'Accessories'];
 
+    // Function to extract gender from search query
+    const extractGenderFromSearch = (query) => {
+        const lowerQuery = query.toLowerCase();
+        
+        // Check for men/male keywords
+        if (/\b(men|male|boys|boy|mens)\b/.test(lowerQuery)) {
+            return 'Men';
+        }
+        
+        // Check for women/female keywords
+        if (/\b(women|female|girls|girl|womens)\b/.test(lowerQuery)) {
+            return 'Women';
+        }
+        
+        return null;
+    };
+
+    // Function to get product name without gender keywords for matching
+    const getSearchTermWithoutGender = (query) => {
+        return query.toLowerCase()
+            .replace(/\b(men|male|boys|boy|mens|women|female|girls|girl|womens|for|and|the|with)\b/gi, '')
+            .trim()
+            .split(/\s+/)  // Split by spaces
+            .filter(word => word.length > 0)  // Remove empty strings
+            .join(' ');  // Join back
+    };
+
     const filteredAndSortedProducts = useMemo(() => {
+        const detectedGender = extractGenderFromSearch(searchQuery);
+        const searchTermWithoutGender = getSearchTermWithoutGender(searchQuery);
+        
+        console.log('Search Query:', searchQuery);
+        console.log('Detected Gender:', detectedGender);
+        console.log('Search Term:', searchTermWithoutGender);
+        
         return products
             .filter((product) => {
                 const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
                 const matchesRating = product.rating >= selectedRating;
-                const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesCategory && matchesRating && matchesSearch;
+                
+                // Check if product matches detected gender
+                const matchesGender = !detectedGender || product.category === detectedGender;
+                
+                // Check if product name matches search term
+                // If only gender keyword was typed (searchTermWithoutGender is empty), match by gender only
+                let matchesSearch = true;
+                if (searchQuery.trim() && searchTermWithoutGender) {
+                    // Has search term after removing gender keywords
+                    const searchTerms = searchTermWithoutGender.split(' ').filter(t => t.length > 0);
+                    matchesSearch = searchTerms.some(term => product.name.toLowerCase().includes(term));
+                } else if (searchQuery.trim() && !searchTermWithoutGender) {
+                    // Only gender keyword was typed - don't filter by name, rely on gender filter
+                    matchesSearch = true;
+                }
+                
+                console.log(`Product: ${product.name}, Matches: ${matchesCategory && matchesRating && matchesGender && matchesSearch}`);
+                
+                return matchesCategory && matchesRating && matchesGender && matchesSearch;
             })
             .sort((a, b) => {
                 if (sortBy === 'price-asc') return a.price - b.price;

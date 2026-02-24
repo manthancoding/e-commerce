@@ -89,7 +89,7 @@ export const ProductDetails = () => {
                                 {product.name}
                             </h1>
                             <div className="flex items-center space-x-4 mb-4">
-                                <span className="text-2xl font-semibold text-gray-900">${product.price.toFixed(2)}</span>
+                                <span className="text-2xl font-semibold text-gray-900">₹{product.price.toLocaleString('en-IN')}</span>
                                 <div className="flex items-center text-sm text-gray-500">
                                     <Star size={16} className="fill-yellow-400 text-yellow-400 mr-1" />
                                     {product.rating} Reviews
@@ -154,7 +154,7 @@ export const ProductDetails = () => {
                         <div className="border-t border-gray-100 pt-8 space-y-4">
                             <div className="flex items-center text-gray-600">
                                 <Truck size={20} className="mr-4" />
-                                <span>Free shipping on orders over $150</span>
+                                <span>Free shipping on orders over ₹12,450</span>
                             </div>
                             <div className="flex items-center text-gray-600">
                                 <RotateCcw size={20} className="mr-4" />

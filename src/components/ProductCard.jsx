@@ -59,7 +59,7 @@ export const ProductCard = ({ product }) => {
                         {product.name}
                     </h3>
                     <span className="text-sm font-semibold text-gray-900">
-                        ${product.price.toFixed(2)}
+                        ₹{product.price.toLocaleString('en-IN')}
                     </span>
                 </div>
                 <div className="flex items-center text-sm text-gray-500 mb-2">

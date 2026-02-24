@@ -48,7 +48,7 @@ export const Cart = () => {
                                                     {item.name}
                                                 </Link>
                                                 <p className="text-gray-500 mt-1">Size: {item.size}</p>
-                                                <p className="font-medium text-gray-900 mt-2">${item.price.toFixed(2)}</p>
+                                                <p className="font-medium text-gray-900 mt-2">₹{item.price.toLocaleString('en-IN')}</p>
                                             </div>
 
                                             <div className="mt-4 sm:mt-0 flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center w-full sm:w-auto">
@@ -96,7 +96,7 @@ export const Cart = () => {
                             <div className="space-y-4 mb-6 text-sm text-gray-600">
                                 <div className="flex justify-between">
                                     <span>Subtotal</span>
-                                    <span className="font-medium text-gray-900">${subtotal.toFixed(2)}</span>
+                                    <span className="font-medium text-gray-900">₹{subtotal.toLocaleString('en-IN')}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span>Shipping</span>
@@ -111,7 +111,7 @@ export const Cart = () => {
                             <div className="border-t border-gray-100 pt-6 mb-8">
                                 <div className="flex justify-between items-center text-lg">
                                     <span className="font-bold text-gray-900">Total</span>
-                                    <span className="font-bold text-gray-900">${total.toFixed(2)}</span>
+                                    <span className="font-bold text-gray-900">₹{total.toLocaleString('en-IN')}</span>
                                 </div>
                             </div>
 

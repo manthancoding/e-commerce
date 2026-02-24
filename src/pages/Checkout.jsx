@@ -201,7 +201,7 @@ export const Checkout = () => {
                                     type="submit"
                                     className="w-full bg-gray-900 text-white py-4 rounded-xl font-medium hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl text-lg"
                                 >
-                                    Place Order • ${total.toFixed(2)}
+                                    Place Order • ₹{total.toLocaleString('en-IN')}
                                 </button>
                             </div>
                         </form>

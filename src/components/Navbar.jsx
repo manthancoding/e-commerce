@@ -1,8 +1,9 @@
 import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Heart, Search, Menu, X } from 'lucide-react';
+import { ShoppingCart, Heart, Search, Menu, X, LogOut } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
 import { WishlistContext } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 
 export const Navbar = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -10,6 +11,7 @@ export const Navbar = () => {
     const navigate = useNavigate();
     const { cart } = useContext(CartContext);
     const { wishlist } = useContext(WishlistContext);
+    const { isAuthenticated, user, logout } = useAuth();
 
     const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
     const wishlistCount = wishlist.length;
@@ -20,6 +22,16 @@ export const Navbar = () => {
             navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
             setSearchQuery('');
             setIsMenuOpen(false);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/');
+            setIsMenuOpen(false);
+        } catch (error) {
+            console.error('Logout error:', error);
         }
     };
 
@@ -70,6 +82,30 @@ export const Navbar = () => {
                                     </span>
                                 )}
                             </Link>
+
+                            {isAuthenticated ? (
+                                <>
+                                    <Link to="/dashboard" className="text-gray-600 hover:text-accent transition-colors font-medium">
+                                        {user?.full_name?.split(' ')[0] || 'Account'}
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-gray-600 hover:text-accent transition-colors"
+                                        title="Logout"
+                                    >
+                                        <LogOut size={22} />
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link to="/login" className="text-gray-600 hover:text-accent transition-colors font-medium">
+                                        Login
+                                    </Link>
+                                    <Link to="/register" className="bg-accent text-white px-4 py-2 rounded-full hover:bg-accent/90 transition-colors font-medium">
+                                        Sign Up
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -126,6 +162,41 @@ export const Navbar = () => {
                                 </span>
                             )}
                         </Link>
+
+                        {isAuthenticated ? (
+                            <>
+                                <Link
+                                    to="/dashboard"
+                                    className="text-gray-600 hover:text-accent block text-lg font-medium"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Dashboard
+                                </Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="text-gray-600 hover:text-accent flex items-center gap-2 text-lg font-medium mt-2 pt-2 border-t border-gray-200"
+                                >
+                                    <LogOut size={20} /> Logout
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link
+                                    to="/login"
+                                    className="text-gray-600 hover:text-accent block text-lg font-medium"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    to="/register"
+                                    className="bg-accent text-white px-4 py-2 rounded-full text-lg font-medium text-center hover:bg-accent/90 transition-colors"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Sign Up
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             )}
